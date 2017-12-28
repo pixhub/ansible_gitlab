@@ -1,7 +1,13 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+ansible_gitlab
+
+Automated Gitlab installation for :
+
+- Debian 7/8/9
+- Ubuntu 14.04LTS/16.04LTS
+- Centos 6/7
 
 Requirements
 ------------
