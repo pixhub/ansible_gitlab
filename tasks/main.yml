@@ -1,0 +1,56 @@
+---
+
+- name: Load Vars
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "1-version-{{ ansible_distribution|lower }}_{{ ansible_distribution_major_version|lower }}.yml"
+    - "2-distribution-{{ ansible_distribution|lower }}-{{ ansible_architecture }}.yml"
+    - "3-distribution-{{ ansible_distribution|lower }}.yml"
+    - "4-family-{{ ansible_os_family|lower }}.yml"
+    - "5-default.yml"
+
+- name: Install dependencies for Debian_OS_Family
+  apt:
+    update_cache: yes
+    name: "{{ packages_install }}"
+    state: present
+  when: ansible_os_family|lower == "debian"
+
+- name: Install dependencies for RedHat_OS_Family
+  yum:
+    update_cache: yes
+    name: "{{ packages_install }}"
+    state: present
+  when: ansible_os_family|lower == "redhat"
+
+- name: Disable Firewall for RedHat_OS_Family
+  service:
+    name: firewalld
+    enabled: no
+    state: stopped
+  when: ansible_os_family|lower == "redhat"
+
+- name: Get GitLab repo script
+  get_url:
+    url: "{{ gitlab_repo }}"
+    mode: 0755
+    owner: root
+    group: root
+    dest: "/root/{{ gitlab_script }}"
+
+- name: Install Gitlab repo
+  shell: "/root/{{ gitlab_script }}"
+
+- name: Install Gitlab
+  apt:
+    update_cache: yes
+    state: latest
+    name: gitlab-ee
+  when: ansible_os_family|lower == "debian"
+
+- name: install Gitlab
+  yum:
+    update_cache: yes
+    state: latest
+    name: gitlab-ee
+  when: ansible_os_family|lower == "redhat"

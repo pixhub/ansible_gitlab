@@ -1,0 +1,10 @@
+gitlab_script: "script.rpm.sh"
+
+packages_install:
+  - curl
+  - policycoreutils-python
+  - openssh-server
+  - cronie
+  - postfix
+
+gitlab_repo: "https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/{{ gitlab_script }}"

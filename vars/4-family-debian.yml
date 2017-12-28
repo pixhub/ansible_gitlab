@@ -1,0 +1,9 @@
+gitlab_script: "script.deb.sh"
+
+packages_install:
+  - curl
+  - openssh-server
+  - ca-certificates
+  - postfix
+
+gitlab_repo: "https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/{{ gitlab_script }}"
